@@ -100,3 +100,23 @@ double calculateTotalArea(Geography* data, int count)
     }
     return totalArea;
 }
+
+void saveData(Geography* data, int count, const string& filename)
+{
+    ofstream file(filename);
+    
+    for (int i = 0; i < count; ++i)
+    {
+        file << data[i].id << " "
+             << data[i].name << " "
+             << data[i].country << " "
+             << data[i].type << " "
+             << data[i].height << " "
+             << data[i].area << " "
+             << data[i].population << endl;
+    }
+
+    file.close();
+    cout << endl;
+    cout << "Данные успешно сохранены в файл: " << filename << endl;
+}
