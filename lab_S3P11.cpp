@@ -63,3 +63,30 @@ void viewData(Geography* data, int count)
         cout << endl;
     }
 }
+
+void editData(Geography* data, int count, int id)
+{
+    for (int i = 0; i < count; ++i)
+    {
+        if (data[i].id == id)
+        {
+            cout << endl;
+            cout << "Введите новое название: ";
+            cin >> data[i].name;
+            cout << "Введите новую страну: ";
+            cin >> data[i].country;
+            cout << "Введите новый тип объекта: ";
+            cin >> data[i].type;
+            cout << "Введите новую высоту: ";
+            cin >> data[i].height;
+            cout << "Введите новую площадь: ";
+            cin >> data[i].area;
+            cout << "Введите новое население: ";
+            cin >> data[i].population;
+            cout << endl;
+            cout << "Данные обновлены.\n";
+            return;
+        }
+    }
+    cout << "Объект с таким ID не найден.\n";
+}
