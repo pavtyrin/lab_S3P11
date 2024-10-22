@@ -47,3 +47,19 @@ Geography* loadData(const string& filename, int& count)
     file.close();
     return data;
 }
+
+void viewData(Geography* data, int count)
+{
+    for (int i = 0; i < count; ++i)
+    {
+        cout << endl;
+        cout << "Id: " << data[i].id << "\n"
+             << "Название: " << data[i].name << "\n"
+             << "Страна: " << data[i].country << "\n"
+             << "Тип: " << data[i].type << "\n"
+             << "Высота: " << data[i].height << " м\n"
+             << "Площадь: " << data[i].area << " км²\n"
+             << "Население: " << data[i].population << endl;
+        cout << endl;
+    }
+}
