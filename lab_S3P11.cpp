@@ -90,3 +90,13 @@ void editData(Geography* data, int count, int id)
     }
     cout << "Объект с таким ID не найден.\n";
 }
+
+double calculateTotalArea(Geography* data, int count)
+{
+    double totalArea = 0;
+    for (int i = 0; i < count; ++i)
+    {
+        totalArea += data[i].area;
+    }
+    return totalArea;
+}
