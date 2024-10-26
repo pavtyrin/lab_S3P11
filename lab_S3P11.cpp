@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iomanip>
 #include <cstdlib>
 
 using namespace std;
@@ -50,17 +51,26 @@ Geography* loadData(const string& filename, int& count)
 
 void viewData(Geography* data, int count)
 {
+    cout << left << setw(5) << "Id" << "|"
+         << setw(25) << "Title" << "|"
+         << setw(15) << "Country" << "|"
+         << setw(15) << "Type" << "|"
+         << setw(10) << "Height" << "|"
+         << setw(15) << "Area" << "|"
+         << setw(20) << "Population"
+         << endl;
+
     for (int i = 0; i < count; ++i)
     {
-        cout << endl;
-        cout << "Id: " << data[i].id << "\n"
-             << "Название: " << data[i].name << "\n"
-             << "Страна: " << data[i].country << "\n"
-             << "Тип: " << data[i].type << "\n"
-             << "Высота: " << data[i].height << " м\n"
-             << "Площадь: " << data[i].area << " км²\n"
-             << "Население: " << data[i].population << endl;
-        cout << endl;
+        cout << setw(101) << "-----------------------------------------------------------------------------------------------------" << endl;
+        cout << left << setw(5) << data[i].id << "|"
+             << setw(25) << data[i].name << "|"
+             << setw(15) << data[i].country << "|"
+             << setw(15) << data[i].type << "|"
+             << setw(10) << data[i].height << "|"
+             << setw(15) << data[i].area << "|"
+             << setw(20) << data[i].population
+             << endl;
     }
 }
 
@@ -77,18 +87,52 @@ void editData(Geography* data, int count, int id)
             cin >> data[i].country;
             cout << "Введите новый тип объекта: ";
             cin >> data[i].type;
+            string input_height;
             cout << "Введите новую высоту: ";
-            cin >> data[i].height;
+            cin >> input_height;
+            try
+            {
+                data[i].height = stoi(input_height);
+            }
+            catch (invalid_argument&)
+            {
+                cout << endl;
+                cout << "Ошибка: высота должна быть числом. Изменения не внесены.\n";
+                return;
+            }
+            string input_area;
             cout << "Введите новую площадь: ";
-            cin >> data[i].area;
+            cin >> input_area;
+            try
+            {
+                data[i].area = stod(input_area);
+            }
+            catch (invalid_argument&)
+            {
+                cout << endl;
+                cout << "Ошибка: площадь должна быть числом. Изменения не внесены.\n";
+                return;
+            }
+            string input_population;
             cout << "Введите новое население: ";
-            cin >> data[i].population;
+            cin >> input_population;
+            try
+            {
+                data[i].population = stoi(input_population);
+            }
+            catch (invalid_argument&)
+            {
+                cout << endl;
+                cout << "Ошибка: население должно быть числом. Изменения не внесены.\n";
+                return;
+            }
             cout << endl;
             cout << "Данные обновлены.\n";
             return;
         }
     }
-    cout << "Объект с таким ID не найден.\n";
+    cout << endl;
+    cout << "Объект с таким Id не найден. Возврат в главное меню.\n";
 }
 
 double calculateTotalArea(Geography* data, int count)
@@ -129,8 +173,9 @@ int main()
 
     data = loadData(filename, count);
 
-    int choice;
-    do
+    string choice;
+
+    while (true)
     {
         cout << "\nМеню:\n";
         cout << "1. Просмотреть данные\n";
@@ -142,49 +187,64 @@ int main()
         cout << "Ваш выбор: ";
         cin >> choice;
 
-        switch (choice)
+        if (choice == "1")
         {
-            case 1:
-                viewData(data, count);
-                break;
+            cout << endl;
+            viewData(data, count);
+            continue;
+        }
 
-            case 2:
+        if (choice == "2")
+        {
+            string input_id;
+            cout << endl;
+            cout << "Введите Id для редактирования: ";
+            cin >> input_id;
+            try
             {
-                int id;
-                cout << endl;
-                cout << "Введите Id для редактирования: ";
-                cin >> id;
+                int id = stoi(input_id);
                 editData(data, count, id);
-                break;
             }
-
-            case 3:
+            catch (invalid_argument&)
             {
-                double totalArea = calculateTotalArea(data, count);
                 cout << endl;
-                cout << "Общая площадь всех объектов: " << totalArea << " км²\n";
-                break;
+                cout << "Ошибка: Id должен быть числом. Возврат в главное меню.\n";
             }
+            continue;           
+        }
 
-            case 4:
-                cout << endl;
-                cout << "Введите имя файла для сохранения данных: ";
-                cin >> filename;
-                saveData(data, count, filename);
-                break;
+        if (choice == "3")
+        {
+            double totalArea = calculateTotalArea(data, count);
+            cout << endl;
+            cout << "Общая площадь всех объектов: " << totalArea << " км²\n";
+            continue;
+        }
 
-            case 0:
-                cout << endl;
-                cout << "Выход из программы.\n";
-                break;
+        if (choice == "4")
+        {
+            cout << endl;
+            cout << "Введите имя файла для сохранения данных: ";
+            cin >> filename;
+            saveData(data, count, filename);
+            continue;
+        }
 
-            default:
-                cout << "Неверный выбор!\n";
-                break;
+        if (choice == "0")
+        {
+            cout << endl;
+            cout << "Выход из программы.\n";
+            exit (0);
+        }
+
+        else 
+        {
+            cout << endl;
+            cout << "Неверный выбор. Возврат в главное меню.!\n";
+            continue;
         }
     }
-    while (choice != 0);
 
-    delete[] data;
     return 0;
+    delete[] data;
 }
